@@ -1,0 +1,40 @@
+body,table,td,td,th {  
+    margin: 0;
+    border: 0;  
+    padding: 0;  
+    border-spacing: 0;
+}
+#content {  
+    display: flex;  
+    align-items: flex-start;  
+    flex-flow: column nowrap;
+}
+#inputForm {  
+    padding: 30px;
+}
+.result {  
+    background-color: red;
+    padding: 0.88cm 0.72cm;  
+    width: 210mm;  
+    height: 297mm;
+}
+table {  
+    width: 100%;  
+    height: 100%;
+}
+tr {  
+    height: 2.54cm;  
+    width: 100%;
+}
+td {  
+    text-align: center;
+    width: 6.35cm;
+    font-family: 'Libre Barcode 128 Text', bold;  
+    font-size: 50px;  
+    background-color: white;  
+    margin: 0px;  
+    padding: 0px;  
+    border: 0px;
+}
+.etiqueta span {  display: inline-block;}
+.hide {  display: none;};
