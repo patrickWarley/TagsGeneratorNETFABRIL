@@ -51,7 +51,7 @@ function createItemList(item, index) {
 }
 
 
-function createElement(innerHTML, element, ...className){
+export function createElement(innerHTML, element, ...className){
     var element = document.createElement(element);
     element.innerHTML =  innerHTML;
 

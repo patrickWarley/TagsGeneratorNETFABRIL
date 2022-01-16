@@ -1,4 +1,4 @@
-import { loadList, resetList } from "./list.js";
+import { loadList, resetList, createElement } from "./list.js";
 
 var link = "https://github.com/bwipp/postscriptbarcode/wiki/Text-Properties";
 
@@ -6,6 +6,7 @@ var link = "https://github.com/bwipp/postscriptbarcode/wiki/Text-Properties";
 //transform the string to the right format
 const encoder = new Code128Generator();
 const form = document.getElementById("myForm");
+
 var addresses = [{
   andar:4,
   comecoRua:1,
@@ -25,11 +26,11 @@ var addresses = [{
 },{
   andar:2,
   comecoRua:1,
-  fimRua:1,
+  fimRua:5,
   comecoEstante:1,
-  fimEstante:1,
+  fimEstante:5,
   comecoPrateleiras:1,
-  fimPrateleiras:1
+  fimPrateleiras:5
 }];
 
 function init(){
@@ -66,35 +67,31 @@ function generatePagePrint(){
 
   //code the flatten or merge a array of arrays
   arrTags =[].concat.apply([], arrTags);
-  
-  //now create the page
-  var page = document.createElement("table");
-  page.classList.add("result");
-
-  var row = document.createElement("tr");
 
   for(let j=0; j<arrTags.length; j+=30){
-    var aux = arrTags.slice(0,30);
+    var aux = arrTags.slice(j,j+30);
 
     if(aux.length<30){
       for(let k=aux.length;k<30;k++){
-        aux.push(generateTag(" "));
+        aux.push(generateTag(""));
       }
     }
+    
+    //now create the page
+    var page = createElement("","table","result");
 
     //generate the rows of the page
     for(let i=0; i<30; i+=3){
+      var row = document.createElement("tr");
+
       row.appendChild(aux[i]);
       row.appendChild(aux[i+1]);
       row.appendChild(aux[i+2]);
 
       page.appendChild(row);
-      row = document.createElement("tr");
     }
 
-    createPagePrint(page, 1);
-    page = document.createElement("table");
-    page.classList.add("result");
+    showPagePrint(page);
   }
 }
 
@@ -126,10 +123,9 @@ function generateAddresses(address){
   return resultado;
 }
 
-function createPagePrint(table, tableid) {
+function showPagePrint(page) {
+
   var iframe = document.createElement("iframe");
-  iframe.name = tableid;
-  iframe.id = tableid;
 
   var style = document.createElement("link");
   style.rel = "stylesheet";
@@ -155,7 +151,7 @@ function createPagePrint(table, tableid) {
   var container = document. getElementById("containerPrint");
 
   container.appendChild(iframe);
-  iframe.contentDocument.body.appendChild(table);
+  iframe.contentDocument.body.appendChild(page);
   iframe.contentDocument.body.addEventListener("click", print);
   iframe.contentDocument.head.appendChild(style);
   iframe.contentDocument.body.appendChild(link);

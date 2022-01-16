@@ -1,17 +1,10 @@
-body,table,td,td,th {  
+body{
     margin: 0;
-    border: 0;  
-    padding: 0;  
-    border-spacing: 0;
+    padding: 0;
+    border: 0;
 }
-#content {  
-    display: flex;  
-    align-items: flex-start;  
-    flex-flow: column nowrap;
-}
-#inputForm {  
-    padding: 30px;
-}
+
+
 .result {  
     background-color: red;
     padding: 0.88cm 0.72cm;  
@@ -30,7 +23,7 @@ td {
     text-align: center;
     width: 6.35cm;
     font-family: 'Libre Barcode 128 Text', bold;  
-    font-size: 50px;  
+    font-size: 40px;  
     background-color: white;  
     margin: 0px;  
     padding: 0px;  
