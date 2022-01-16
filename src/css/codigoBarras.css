@@ -7,7 +7,7 @@ body{
 
 .result {  
     background-color: red;
-    padding: 0.88cm 0.72cm;  
+    padding: 1.27cm 0.48cm 1.27cm 0.48cm;  
     width: 210mm;  
     height: 297mm;
 }
@@ -21,7 +21,7 @@ tr {
 }
 td {  
     text-align: center;
-    width: 6.35cm;
+    width: 6.67cm;
     font-family: 'Libre Barcode 128 Text', bold;  
     font-size: 40px;  
     background-color: white;  
