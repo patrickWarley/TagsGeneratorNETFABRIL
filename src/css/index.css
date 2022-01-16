@@ -24,17 +24,10 @@ body{
     margin:10px 0 10px 0;
 }
 
-.menu input{
-    margin: 10px;
-}
-
 .paddingcol{
     padding: 20px;
 }
 
-.container{
-    padding: 0;
-}
 
 .btn-danger-fabril{
     background-color: #f7702d;
@@ -48,5 +41,23 @@ body{
 #list{
     padding: 20px;
     min-width: 300px;
-    max-height: 300px;
+    max-height: 400px;
+    min-height: 400px;
 }
+
+/*this is the configuration that makes the x button stay on the right center*/
+#controls{
+    display:flex;
+    align-items: center;
+    justify-content: right;
+}
+
+#containerPrint{
+    margin:10px;
+    padding: 10px;
+}
+
+#controles{
+    background-color: #DB764C;
+}
+

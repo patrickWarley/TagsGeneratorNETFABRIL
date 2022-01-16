@@ -7,8 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <link href="./src/css/index.css" rel="stylesheet" />
+
     <title>Gerador de etiquetas</title>
+
 </head>
 
 <body>
@@ -18,78 +21,88 @@
         </a>
         <span id="nameApp">Gerador de codigo de Barras</span>
     </nav>
-    <div id="menu" class="menu container">
-        <form id="myForm">
-        <div class="row .list-group-horizontal">
-            <div class=" col-md-3 my-auto paddingcol">
-                <div class="form-floating">
-                    <input required type="number" min="1" class="form-control" id="andar" name="andar" placeholder="andar"/>
-                    <label for="andar">Andar</label>
+<div class=container>
+        <div class="container">
+            <form id="myForm">
+            <div id="menu" class="menu .list-group-horizontal row">
+                <div id="controles" class="col-md-3">
+                    <div class="row">
+                        <div class="form-floating col-md">
+                            <input required type="number" min="1" class="form-control" id="andar" name="andar"
+                                placeholder="andar" />
+                            <label for="andar">Andar</label>
+                        </div>
+                    </div>
+                    <div class=" row">
+                        <h5>Intervalo de ruas:</h5>
+                        <div class="form-floating col-md-6 mb-3">
+                            <input required type="number" min="1" class="form-control" id="comecoRua" name="comecoRua"
+                                placeholder="Começo" />
+                            <label for="comecoRua">Começo</label>
+                        </div>
+                        <div class="form-floating col-sm-6 mb-3">
+                            <input required type="number" min="1" class="form-control" id="fimRua" name="fimRua"
+                                placeholder="Fim" />
+                            <label for="fimRua">Fim</label>
+                        </div>
+                    </div>
+                    <div class=" row">
+                        <h5>Intervalo de estantes:</h5>
+                        <div class="form-floating col-md-6">
+                            <input required type="number" min="1" class="form-control" id="comecoEstante"
+                                name="comecoEstante" placeholder="Começo" />
+                            <label for="comecoEstante">Começo</label>
+                        </div>
+                        <div class="form-floating col-md-6">
+                            <input required type="number" min="1" class="form-control" id="fimEstante" name="fimEstante"
+                                placeholder="Fim" />
+                            <label for="fimEstante">Fim</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h5>Intervalo de prateleiras:</h5>
+                        <div class="form-floating col-md-6">
+                            <input required type="number" min="1" class="form-control" id="comecoPrateleiras"
+                                name="comecoPrateleiras" placeholder="Começo" />
+                            <label for="comecoPrateleiras">Começo</label>
+                        </div>
+                        <div class="form-floating col-md-6">
+                            <input required type="number" min="1" class="form-control" id="fimPrateleiras"
+                                name="fimPrateleiras" placeholder="Fim" />
+                            <label for="fimPrateleiras">Fim</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <button class="btn-dark btn btn-block" type="submit" value="adicionar">Adicionar</button>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <ul class="border overflow-auto list-group-vertical row" id="list">
+                    </ul>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <button class="btn btn-danger-fabril" id="resetListButton">Limpar</button>
+                            <button class="btn btn-success" id="gerarPagePrint">Gerar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="border-end border-start col-md-3 paddingcol">
-                <h5>Intervalo de ruas:</h5>
-                <div class="form-floating">
-                    <input required type="number" min="1" class="form-control" id="comecoRua" name="comecoRua" placeholder="Começo" />
-                    <label for="comecoRua">Começo</label>
-                </div>
-                </br>
-                <div class="form-floating">
-                    <input required type="number" min="1" class="form-control" id="fimRua" name="fimRua" placeholder="Fim" />
-                    <label for="fimRua">Fim</label>
-                </div>
-            </div>
-            <div class="border-end border-start col-md-3 paddingcol">
-                <h5>Intervalo de estantes:</h5>
-                <div class="form-floating">
-                    <input required type="number" min="1" class="form-control" id="comecoEstante" name="comecoEstante"
-                        placeholder="Começo" />
-                    <label for="comecoEstante">Começo</label>
-                </div>
-                </br>
-                <div class="form-floating">
-                    <input required type="number" min="1" class="form-control" id="fimEstante" name="fimEstante" placeholder="Fim" />
-                    <label for="fimEstante">Fim</label>
-                </div>
-            </div>
-            <div class="col-md-3 border-end border-start paddingcol">
-                <h5>Intervalo de prateleiras:</h5>
-                <div class="form-floating">
-                    <input required type="number" min="1" class="form-control" id="comecoPrateleiras" name="comecoPrateleiras"
-                        placeholder="Começo" />
-                    <label for="comecoPrateleiras">Começo</label>
-                </div>
-                </br>
-                <div class="form-floating">
-                    <input required type="number" min="1" class="form-control" id="fimPrateleiras" name="fimPrateleiras"
-                        placeholder="Fim" />
-                    <label for="fimPrateleiras">Fim</label>
-                </div>
-            </div>
-
+            </form>
         </div>
-        <div class="row">
-            <button class="btn-dark btn btn-block" type="submit" value="adicionar">Adicionar</button>
-        </div>
-        </form>
+    
+    <div class="container" id="containerPrint">
     </div>
-    <div class="container">
-        <ul class="border overflow-auto list-group-vertical row" id="list">
-        </ul>
-        <div id="row controls">
-            <button class="btn btn-danger-fabril" id="resetListButton">Limpar</button>
-            <button class="btn btn-success">Gerar</button>
-        </div>
-    </div>
+</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
 
-<script src="./src/js/code-128-encoder.min.js"></script>
-<script type = "module" src="./src/js/modules/list.js"></script>
-<script type = "module" src="./src/js/modules/codigoBarras.js">
-    function alertX(){alert("");}
-</script>
+    <script src="./src/js/code-128-encoder.min.js"></script>
+    <script type="module" src="./src/js/modules/list.js"></script>
+    <script type="module" src="./src/js/modules/codigoBarras.js">
+    </script>
 </body>
+
 </html>

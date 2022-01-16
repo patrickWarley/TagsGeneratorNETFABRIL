@@ -12,49 +12,52 @@ export function loadList(addresses) {
             list.appendChild(createItemList(item, index));
         });
     } else {
-        let li = createLi();
-
-        li.innerHTML = "<p>Nenhum endereço adicionado ainda!</p>";
-
+        let li = createElement("Nenhum endereço adicionado ainda!", "li", "list-group-item");
         list.appendChild(li);
     }
 }
 
 function createItemList(item, index) {
-    var html = `<span class="col-md-3">
-                    Andar:${item.andar}
-                </span>
-                <span class="col-md-3">
-                    Ruas : ${item.comecoRua}-${item.fimRua}
-                </span>
-                <span class="col-md-3">
-                    Estantes : ${item.comecoEstante}-${item.fimEstante}
-                </span>
-                <span class="col-md-3">
-                    Prateleiras : ${item.comecoPrateleiras}-${item.fimPrateleiras}
-                </span>`;
 
-    var li = createLi();
+    var li = createElement("", "li", "list-group-item");
 
-    var button = document.createElement("button");
-    button.addEventListener("click", function(event){excluirAddress(event);});
-    button.setAttribute("idaddress", index);
+    var div = createElement("","div", "list-group-horizontal", "row");
 
-    var div = document.createElement("div");
-    div.classList.add("list-group-horizontal");
-    div.classList.add("row");
-    div.innerHTML= html;
+    var remove = createElement("","span", "bi","bi-x-square-fill");
+    remove.addEventListener("click", function(event){excluirAddress(event);});
+    remove.setAttribute("idaddress", index);
 
-    div.appendChild(button);
+    var controlsDiv = createElement("", "div", "col-md-3");
+    var textDivWrapper =  createElement("", "div", "col-md-9")
+    var textDiv = createElement("", "div", "row");
+
+    textDiv.appendChild(createElement(`Andar:${item.andar}`, "span","col-md-3"));
+    textDiv.appendChild(createElement(`Ruas : ${item.comecoRua}-${item.fimRua}`, "span", "col-md-3"));
+    textDiv.appendChild(createElement(`Estantes : ${item.comecoEstante}-${item.fimEstante}`, "span", "col-md-3"));
+    textDiv.appendChild(createElement(`Prateleiras : ${item.comecoPrateleiras}-${item.fimPrateleiras}`,"span", "col-md-3"));
+
+    //add controls
+    controlsDiv.id="controls";
+    controlsDiv.appendChild(remove);
+
+    textDivWrapper.appendChild(textDiv);
+    
+    div.appendChild(textDivWrapper);
+    div.appendChild(controlsDiv);
+    
     li.appendChild(div);
 
     return li;
 }
 
-function createLi(){
-    var li = document.createElement("li");
-    li.classList.add("list-group-item");
-    return li;
+
+function createElement(innerHTML, element, ...className){
+    var element = document.createElement(element);
+    element.innerHTML =  innerHTML;
+
+    if(className.length !==0)className.forEach(cssClass => element.classList.add(cssClass));
+
+    return element;
 }
 
 export function resetList() {

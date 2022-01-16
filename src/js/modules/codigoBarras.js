@@ -6,7 +6,31 @@ var link = "https://github.com/bwipp/postscriptbarcode/wiki/Text-Properties";
 //transform the string to the right format
 const encoder = new Code128Generator();
 const form = document.getElementById("myForm");
-var addresses = [];
+var addresses = [{
+  andar:4,
+  comecoRua:1,
+  fimRua:1,
+  comecoEstante:1,
+  fimEstante:1,
+  comecoPrateleiras:1,
+  fimPrateleiras:1
+},{
+  andar:3,
+  comecoRua:1,
+  fimRua:1,
+  comecoEstante:1,
+  fimEstante:1,
+  comecoPrateleiras:1,
+  fimPrateleiras:1
+},{
+  andar:2,
+  comecoRua:1,
+  fimRua:1,
+  comecoEstante:1,
+  fimEstante:1,
+  comecoPrateleiras:1,
+  fimPrateleiras:1
+}];
 
 function init(){
 
@@ -19,10 +43,13 @@ function init(){
 
   var buttonReset = document.getElementById("resetListButton");
   buttonReset.addEventListener("click", function(){resetListAddress();});
+
+  var buttonGerar = document.getElementById("gerarPagePrint");
+  buttonGerar.addEventListener("click", generatePagePrint);
 }
 
 function generateTag(text){
-  var textNode = document.createTextNode(encoder.encode(tags[i]));
+  var textNode = document.createTextNode(encoder.encode(text));
   var text = document.createElement("span");
   text.appendChild(textNode);
 
@@ -33,18 +60,60 @@ function generateTag(text){
   return newEtiqueta;
 }
 
-function generateAddresses(range){
+function generatePagePrint(){
+  
+  var arrTags = addresses.map( item => generateAddresses(item));
 
-  var resultString = "A" + andar + ".";
-  for (var i = rua[0]; i <= rua[1]; i++) {
+  //code the flatten or merge a array of arrays
+  arrTags =[].concat.apply([], arrTags);
+  
+  //now create the page
+  var page = document.createElement("table");
+  page.classList.add("result");
+
+  var row = document.createElement("tr");
+
+  for(let j=0; j<arrTags.length; j+=30){
+    var aux = arrTags.slice(0,30);
+
+    if(aux.length<30){
+      for(let k=aux.length;k<30;k++){
+        aux.push(generateTag(" "));
+      }
+    }
+
+    //generate the rows of the page
+    for(let i=0; i<30; i+=3){
+      row.appendChild(aux[i]);
+      row.appendChild(aux[i+1]);
+      row.appendChild(aux[i+2]);
+
+      page.appendChild(row);
+      row = document.createElement("tr");
+    }
+
+    createPagePrint(page, 1);
+    page = document.createElement("table");
+    page.classList.add("result");
+  }
+}
+
+function generateAddresses(address){
+
+  var resultString = "A" + address.andar + ".";
+  var resultado = [];
+
+  let{comecoEstante,comecoPrateleiras, comecoRua,fimEstante, fimPrateleiras, fimRua} = address;
+
+  for (var i = comecoRua; i <= fimRua; i++) {
     var estado1 = resultString;
     resultString += "R" + i + ".";
 
-    for (var j = estante[0]; j <= estante[1]; j++) {
+    for (var j = comecoEstante; j <= fimEstante; j++) {
       var estado2 = resultString;
       resultString += "E" + j + ".";
 
-      for (var k = prateleira[0]; k <= prateleira[1]; k++) {
+      for (var k = comecoPrateleiras; k <= fimPrateleiras; k++) {
         resultado.push(generateTag(resultString + "P" + k));
       }
 
@@ -57,80 +126,6 @@ function generateAddresses(range){
   return resultado;
 }
 
-
-function criarCodigo(){
-
-  //var andar = prompt("Qual andar?");
-  //var intervaloRuas = prompt("Intervalo ruas: começo-fim");
-  //var intervaloEstantes = prompt("Intervalo estantes: começo-fim");
-  //var intervaloPrateleiras = prompt("Invalor prateleiras: começo-fim");
-
-  var andar = 3;
-  var intervaloRuas = "5-5";
-  var intervaloEstantes = "1-8";
-  var intervaloPrateleiras = "1-7";
-  
-  var resultado = [];
-
-  var rua = intervaloRuas.split("-");
-  var estante = intervaloEstantes.split("-");
-  var prateleira = intervaloPrateleiras.split("-");
-
-  var range =0  ; //How I'm going to pass the info 
-
-  //code to create the tags
-  var tags = generateAddresses(range);
-
-  var result = document.createElement("table");
-  result.classList.add("result");
-
-  var row = document.createElement("tr");
-  
-  //find the nearest multiple of 30
-  let mod30 = resultado.length%30;
-  let nearest30multiple = resultado.length+(30-mod30);
-
-  for (var i = 0; i < nearest30multiple; i++) {
-    var tag;
-
-    if(resultado[i]){
-      tag = resultado[i];
-    }else{
-      tag = generateTag(1);
-    }
-
-    row.appendChild(tag);
-
-    if ((i + 1) % 30 == 0) {
-      //append the row
-      result.appendChild(row);
-
-      //create one new
-      row = document.createElement("tr");
-
-      //append the table
-      document.body.appendChild(result);
-
-      //create the page to print
-      createPagePrint(result, i);
-
-      //restart
-      result = document.createElement("table");
-      result.classList.add("result");
-    }
-
-    //here I'm just filling the row
-    //if we are in a multiple of 30 don't add the row because we already did above
-    if ((i + 1) % 3 == 0 && (i + 1) % 30 !== 0) {
-      result.appendChild(row);
-      row = document.createElement("tr");
-    }
-  }
-
-}
-
-
-
 function createPagePrint(table, tableid) {
   var iframe = document.createElement("iframe");
   iframe.name = tableid;
@@ -139,7 +134,7 @@ function createPagePrint(table, tableid) {
   var style = document.createElement("link");
   style.rel = "stylesheet";
   style.type = "text/css";
-  style.href = "./codigoBarras.css";
+  style.href = "./src/css/codigoBarras.css";
   
 
   var link = document.createElement("link");
@@ -156,7 +151,10 @@ function createPagePrint(table, tableid) {
   link3.href =
     "https://fonts.googleapis.com/css2?family=Libre+Barcode+128+Text&display=swap";
   
-  document.body.appendChild(iframe);
+  //container
+  var container = document. getElementById("containerPrint");
+
+  container.appendChild(iframe);
   iframe.contentDocument.body.appendChild(table);
   iframe.contentDocument.body.addEventListener("click", print);
   iframe.contentDocument.head.appendChild(style);
@@ -171,8 +169,6 @@ function print(event) {
   frame.defaultView.focus();
   frame.defaultView.print();
 }
-
-
 
 function addAddress(){
   var formData = new FormData(form);
@@ -195,6 +191,5 @@ export function excluirAddress(event){
   addresses.splice(id,1);  
   loadList(addresses);
 }
-
 
 init();
