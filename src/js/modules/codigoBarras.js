@@ -1,9 +1,25 @@
+import { loadList, resetList } from "./list.js";
+
 var link = "https://github.com/bwipp/postscriptbarcode/wiki/Text-Properties";
 
 //encoder = the 128 ins't just a string this encoder is responsible for
 //transform the string to the right format
 const encoder = new Code128Generator();
+const form = document.getElementById("myForm");
+var addresses = [];
 
+function init(){
+
+  loadList(addresses);
+
+  form.addEventListener("submit", function(event){
+    event.preventDefault();
+    addAddress();
+  });
+
+  var buttonReset = document.getElementById("resetListButton");
+  buttonReset.addEventListener("click", function(){resetListAddress();});
+}
 
 function generateTag(text){
   var textNode = document.createTextNode(encoder.encode(tags[i]));
@@ -156,6 +172,29 @@ function print(event) {
   frame.defaultView.print();
 }
 
-criarCodigo();
 
- 
+
+function addAddress(){
+  var formData = new FormData(form);
+  var address = Object.fromEntries(formData.entries());
+
+  addresses.push(address);
+
+  loadList(addresses);
+}
+
+function resetListAddress(){
+  addresses = [];
+  resetList();
+  loadList(addresses);
+}
+
+export function excluirAddress(event){
+  var target = event.target;
+  var id = target.getAttribute("idaddress");
+  addresses.splice(id,1);  
+  loadList(addresses);
+}
+
+
+init();

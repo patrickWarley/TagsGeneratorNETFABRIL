@@ -44,3 +44,9 @@ body{
     background-color: #783210;
     color:white;
 }
+
+#list{
+    padding: 20px;
+    min-width: 300px;
+    max-height: 300px;
+}
