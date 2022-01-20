@@ -61,8 +61,113 @@ function generateTag(text){
   return newEtiqueta;
 }
 
+function generateAddresses(address){
+
+  var resultString = "A" + address.andar + ".";
+  var resultado = [];
+
+  let{comecoEstante,comecoPrateleiras, comecoRua,fimEstante, fimPrateleiras, fimRua} = address;
+
+  for (var i = comecoRua; i <= fimRua; i++) {
+    var estado1 = resultString;
+    resultString += "R" + i + ".";
+
+    for (var j = comecoEstante; j <= fimEstante; j++) {
+      var estado2 = resultString;
+      resultString += "E" + j + ".";
+
+      for (var k = comecoPrateleiras; k <= fimPrateleiras; k++) {
+        resultado.push(generateTag(resultString + "P" + k));
+      }
+
+      resultString = estado2;
+    }
+
+    resultString = estado1;
+  }
+
+  return resultado;
+}
+
+function addAddress(){
+  var formData = new FormData(form);
+  var address = Object.fromEntries(formData.entries());
+
+  addresses.push(address);
+
+  loadList(addresses);
+}
+
+function resetListAddress(){
+  addresses = [];
+  clearPagesPrint();
+  resetList();
+  loadList(addresses);
+}
+
+export function excluirAddress(event){
+  var target = event.target;
+  var id = target.getAttribute("idaddress");
+  addresses.splice(id,1);  
+  loadList(addresses);
+}
+
+function clearPagesPrint(){
+  var cards = document.getElementsByClassName("pageCard");
+
+  if(cards.length!=0)for(let i=cards.length-1; i>=0 ; i--)cards[i].remove();
+};
+
+function showPagePrint(page) {
+  var divCol = createElement("","div","col-md-3", "pageCard");
+  var divCard = createElement("","div", "card", "text-center", "marginCard");
+  var divCarHeader = createElement("Imprimir", "div", "card-header");
+
+  var iframe = document.createElement("iframe");
+
+  var style = document.createElement("link");
+  style.rel = "stylesheet";
+  style.type = "text/css";
+  style.href = "./src/css/codigoBarras.css";
+  
+
+  var link = document.createElement("link");
+  var link2 = document.createElement("link");
+  var link3 = document.createElement("link");
+
+  link.rel = "preconnect";
+  link.href = "https://fonts.googleapis.com";
+
+  link2.rel = "preconnect";
+  link2.href = "https://fonts.gstatic.com";
+
+  link3.rel = "stylesheet";
+  link3.href =
+    "https://fonts.googleapis.com/css2?family=Libre+Barcode+128+Text&display=swap";
+  
+  //container
+  var container = document. getElementById("containerPrint");
+
+  divCard.appendChild(divCarHeader);
+  divCard.appendChild(iframe);
+
+  divCol.appendChild(divCard);
+  container.appendChild(divCol);
+
+  //add Iframe components
+  iframe.contentDocument.body.appendChild(page);
+  iframe.contentDocument.body.addEventListener("click", print);
+  iframe.contentDocument.head.appendChild(style);
+  iframe.contentDocument.body.appendChild(link);
+  iframe.contentDocument.body.appendChild(link2);
+  iframe.contentDocument.body.appendChild(link3);
+}
+
 function generatePagePrint(){
   
+  //reset the list of pages
+  clearPagesPrint();
+
   var arrTags = addresses.map( item => generateAddresses(item));
 
   //code the flatten or merge a array of arrays
@@ -95,97 +200,11 @@ function generatePagePrint(){
   }
 }
 
-function generateAddresses(address){
-
-  var resultString = "A" + address.andar + ".";
-  var resultado = [];
-
-  let{comecoEstante,comecoPrateleiras, comecoRua,fimEstante, fimPrateleiras, fimRua} = address;
-
-  for (var i = comecoRua; i <= fimRua; i++) {
-    var estado1 = resultString;
-    resultString += "R" + i + ".";
-
-    for (var j = comecoEstante; j <= fimEstante; j++) {
-      var estado2 = resultString;
-      resultString += "E" + j + ".";
-
-      for (var k = comecoPrateleiras; k <= fimPrateleiras; k++) {
-        resultado.push(generateTag(resultString + "P" + k));
-      }
-
-      resultString = estado2;
-    }
-
-    resultString = estado1;
-  }
-
-  return resultado;
-}
-
-function showPagePrint(page) {
-
-  var iframe = document.createElement("iframe");
-
-  var style = document.createElement("link");
-  style.rel = "stylesheet";
-  style.type = "text/css";
-  style.href = "./src/css/codigoBarras.css";
-  
-
-  var link = document.createElement("link");
-  var link2 = document.createElement("link");
-  var link3 = document.createElement("link");
-
-  link.rel = "preconnect";
-  link.href = "https://fonts.googleapis.com";
-
-  link2.rel = "preconnect";
-  link2.href = "https://fonts.gstatic.com";
-
-  link3.rel = "stylesheet";
-  link3.href =
-    "https://fonts.googleapis.com/css2?family=Libre+Barcode+128+Text&display=swap";
-  
-  //container
-  var container = document. getElementById("containerPrint");
-
-  container.appendChild(iframe);
-  iframe.contentDocument.body.appendChild(page);
-  iframe.contentDocument.body.addEventListener("click", print);
-  iframe.contentDocument.head.appendChild(style);
-  iframe.contentDocument.body.appendChild(link);
-  iframe.contentDocument.body.appendChild(link2);
-  iframe.contentDocument.body.appendChild(link3);
-}
-
 function print(event) {
   var target = event.target;
   var frame = target.ownerDocument;
   frame.defaultView.focus();
   frame.defaultView.print();
-}
-
-function addAddress(){
-  var formData = new FormData(form);
-  var address = Object.fromEntries(formData.entries());
-
-  addresses.push(address);
-
-  loadList(addresses);
-}
-
-function resetListAddress(){
-  addresses = [];
-  resetList();
-  loadList(addresses);
-}
-
-export function excluirAddress(event){
-  var target = event.target;
-  var id = target.getAttribute("idaddress");
-  addresses.splice(id,1);  
-  loadList(addresses);
 }
 
 init();
